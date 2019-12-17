@@ -10,11 +10,12 @@ include_directories( ${OPENGL_INCLUDE_DIRS}
         ${GLUT_INCLUDE_DIRS}
         ${GLEW_INCLUDE_DIRS})
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -fsanitize=address,undefined -D_GCXX_DEBUG")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -lpthread")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -DDEBUG -fsanitize=address,undefined -D_GCXX_DEBUG")
 
-set(SOURCE context.cpp
-           context.h)
+set(SOURCE lib/stbi_image.hpp
+           src/context.cpp src/shader.cpp src/texture.cpp
+           headers/context.h headers/shader.h headers/texture.h)
 
 add_executable(dgraph main.cpp ${SOURCE})
 

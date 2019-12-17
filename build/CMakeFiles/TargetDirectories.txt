@@ -1,0 +1,3 @@
+/home/dzhiblavi/Documents/prog/cpp/code/dgraph/build/CMakeFiles/rebuild_cache.dir
+/home/dzhiblavi/Documents/prog/cpp/code/dgraph/build/CMakeFiles/dgraph.dir
+/home/dzhiblavi/Documents/prog/cpp/code/dgraph/build/CMakeFiles/edit_cache.dir

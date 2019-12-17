@@ -8,10 +8,10 @@
 #include <stdexcept>
 #include <cassert>
 #include <thread>
+#include <mutex>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <condition_variable>
 
 namespace dgl {
 class context;
@@ -32,25 +32,16 @@ public:
     };
 
 private:
-    window_ptr pw_;
-    std::function<void()> fproc_;
-
-    struct render_thread_ {
-        std::mutex m;
-        std::condition_variable cv;
-        bool work = false;
-        bool quit = false;
-        std::thread t;
-
-        explicit render_thread_(std::function<void()>&& f);
-        ~render_thread_();
-
-        void stop();
-    } wt_;
+    context* ctx_ = nullptr;
+    attributes* attr_ = nullptr;
+    window_ptr pw_ = nullptr;
+    std::function<void()> main_loop_{};
+    std::thread t_{};
 
 private:
     void process_();
-    void close_();
+    void run_();
+    void stop_();
 
 public:
     window(context& ctx, attributes* attr);
@@ -59,7 +50,8 @@ public:
     void set_default_viewport();
     void set_as_main_context();
     [[nodiscard]] bool should_close();
-    void set_process(std::function<void()> fproc);
+    [[nodiscard]] window_ptr native_handle();
+    void set_process(std::function<void()> main_loop);
 };
 
 class context {
@@ -74,8 +66,6 @@ private:
 public:
     context();
     ~context();
-
-    void exec();
 };
 }
 
