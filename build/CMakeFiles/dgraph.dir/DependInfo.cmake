@@ -4,9 +4,10 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/dzhiblavi/Documents/prog/cpp/code/dgraph/context.cpp" "/home/dzhiblavi/Documents/prog/cpp/code/dgraph/build/CMakeFiles/dgraph.dir/context.cpp.o"
   "/home/dzhiblavi/Documents/prog/cpp/code/dgraph/main.cpp" "/home/dzhiblavi/Documents/prog/cpp/code/dgraph/build/CMakeFiles/dgraph.dir/main.cpp.o"
-  "/home/dzhiblavi/Documents/prog/cpp/code/dgraph/shader.cpp" "/home/dzhiblavi/Documents/prog/cpp/code/dgraph/build/CMakeFiles/dgraph.dir/shader.cpp.o"
+  "/home/dzhiblavi/Documents/prog/cpp/code/dgraph/src/context.cpp" "/home/dzhiblavi/Documents/prog/cpp/code/dgraph/build/CMakeFiles/dgraph.dir/src/context.cpp.o"
+  "/home/dzhiblavi/Documents/prog/cpp/code/dgraph/src/shader.cpp" "/home/dzhiblavi/Documents/prog/cpp/code/dgraph/build/CMakeFiles/dgraph.dir/src/shader.cpp.o"
+  "/home/dzhiblavi/Documents/prog/cpp/code/dgraph/src/texture.cpp" "/home/dzhiblavi/Documents/prog/cpp/code/dgraph/build/CMakeFiles/dgraph.dir/src/texture.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

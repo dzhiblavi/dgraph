@@ -68,7 +68,14 @@ context::~context() {
     for (auto w : vw_)
         w->run_();
 
+//    std::chrono::time_point base = std::chrono::steady_clock::now();
     while (!vw_.empty()) {
+//        std::chrono::time_point now = std::chrono::steady_clock::now();
+//        std::chrono::duration<double> tmp = std::chrono::steady_clock::now() - base;
+//        base = now;
+//        errlog("glfwPoll(), fps = ", 1.f / tmp.count());
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(25));
         glfwPollEvents();
         for (auto it = vw_.begin(); it != vw_.end(); ) {
             if ((*it)->should_close()) {

@@ -74,12 +74,12 @@ clean: CMakeFiles/dgraph.dir/clean
 CMakeFiles/dgraph.dir/all:
 	$(MAKE) -f CMakeFiles/dgraph.dir/build.make CMakeFiles/dgraph.dir/depend
 	$(MAKE) -f CMakeFiles/dgraph.dir/build.make CMakeFiles/dgraph.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/dzhiblavi/Documents/prog/cpp/code/dgraph/build/CMakeFiles --progress-num=1,2,3,4 "Built target dgraph"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/dzhiblavi/Documents/prog/cpp/code/dgraph/build/CMakeFiles --progress-num=1,2,3,4,5 "Built target dgraph"
 .PHONY : CMakeFiles/dgraph.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/dgraph.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/dzhiblavi/Documents/prog/cpp/code/dgraph/build/CMakeFiles 4
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dzhiblavi/Documents/prog/cpp/code/dgraph/build/CMakeFiles 5
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/dgraph.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/dzhiblavi/Documents/prog/cpp/code/dgraph/build/CMakeFiles 0
 .PHONY : CMakeFiles/dgraph.dir/rule

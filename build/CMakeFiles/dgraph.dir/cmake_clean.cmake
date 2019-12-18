@@ -1,7 +1,8 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/dgraph.dir/context.cpp.o"
   "CMakeFiles/dgraph.dir/main.cpp.o"
-  "CMakeFiles/dgraph.dir/shader.cpp.o"
+  "CMakeFiles/dgraph.dir/src/context.cpp.o"
+  "CMakeFiles/dgraph.dir/src/shader.cpp.o"
+  "CMakeFiles/dgraph.dir/src/texture.cpp.o"
   "dgraph"
   "dgraph.pdb"
 )

@@ -70,44 +70,59 @@ CMakeFiles/dgraph.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/dgraph.dir/main.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/dzhiblavi/Documents/prog/cpp/code/dgraph/main.cpp -o CMakeFiles/dgraph.dir/main.cpp.s
 
-CMakeFiles/dgraph.dir/context.cpp.o: CMakeFiles/dgraph.dir/flags.make
-CMakeFiles/dgraph.dir/context.cpp.o: ../context.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/dzhiblavi/Documents/prog/cpp/code/dgraph/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/dgraph.dir/context.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/dgraph.dir/context.cpp.o -c /home/dzhiblavi/Documents/prog/cpp/code/dgraph/context.cpp
+CMakeFiles/dgraph.dir/src/context.cpp.o: CMakeFiles/dgraph.dir/flags.make
+CMakeFiles/dgraph.dir/src/context.cpp.o: ../src/context.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/dzhiblavi/Documents/prog/cpp/code/dgraph/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/dgraph.dir/src/context.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/dgraph.dir/src/context.cpp.o -c /home/dzhiblavi/Documents/prog/cpp/code/dgraph/src/context.cpp
 
-CMakeFiles/dgraph.dir/context.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/dgraph.dir/context.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/dzhiblavi/Documents/prog/cpp/code/dgraph/context.cpp > CMakeFiles/dgraph.dir/context.cpp.i
+CMakeFiles/dgraph.dir/src/context.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/dgraph.dir/src/context.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/dzhiblavi/Documents/prog/cpp/code/dgraph/src/context.cpp > CMakeFiles/dgraph.dir/src/context.cpp.i
 
-CMakeFiles/dgraph.dir/context.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/dgraph.dir/context.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/dzhiblavi/Documents/prog/cpp/code/dgraph/context.cpp -o CMakeFiles/dgraph.dir/context.cpp.s
+CMakeFiles/dgraph.dir/src/context.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/dgraph.dir/src/context.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/dzhiblavi/Documents/prog/cpp/code/dgraph/src/context.cpp -o CMakeFiles/dgraph.dir/src/context.cpp.s
 
-CMakeFiles/dgraph.dir/shader.cpp.o: CMakeFiles/dgraph.dir/flags.make
-CMakeFiles/dgraph.dir/shader.cpp.o: ../shader.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/dzhiblavi/Documents/prog/cpp/code/dgraph/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/dgraph.dir/shader.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/dgraph.dir/shader.cpp.o -c /home/dzhiblavi/Documents/prog/cpp/code/dgraph/shader.cpp
+CMakeFiles/dgraph.dir/src/shader.cpp.o: CMakeFiles/dgraph.dir/flags.make
+CMakeFiles/dgraph.dir/src/shader.cpp.o: ../src/shader.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/dzhiblavi/Documents/prog/cpp/code/dgraph/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/dgraph.dir/src/shader.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/dgraph.dir/src/shader.cpp.o -c /home/dzhiblavi/Documents/prog/cpp/code/dgraph/src/shader.cpp
 
-CMakeFiles/dgraph.dir/shader.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/dgraph.dir/shader.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/dzhiblavi/Documents/prog/cpp/code/dgraph/shader.cpp > CMakeFiles/dgraph.dir/shader.cpp.i
+CMakeFiles/dgraph.dir/src/shader.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/dgraph.dir/src/shader.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/dzhiblavi/Documents/prog/cpp/code/dgraph/src/shader.cpp > CMakeFiles/dgraph.dir/src/shader.cpp.i
 
-CMakeFiles/dgraph.dir/shader.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/dgraph.dir/shader.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/dzhiblavi/Documents/prog/cpp/code/dgraph/shader.cpp -o CMakeFiles/dgraph.dir/shader.cpp.s
+CMakeFiles/dgraph.dir/src/shader.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/dgraph.dir/src/shader.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/dzhiblavi/Documents/prog/cpp/code/dgraph/src/shader.cpp -o CMakeFiles/dgraph.dir/src/shader.cpp.s
+
+CMakeFiles/dgraph.dir/src/texture.cpp.o: CMakeFiles/dgraph.dir/flags.make
+CMakeFiles/dgraph.dir/src/texture.cpp.o: ../src/texture.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/dzhiblavi/Documents/prog/cpp/code/dgraph/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/dgraph.dir/src/texture.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/dgraph.dir/src/texture.cpp.o -c /home/dzhiblavi/Documents/prog/cpp/code/dgraph/src/texture.cpp
+
+CMakeFiles/dgraph.dir/src/texture.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/dgraph.dir/src/texture.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/dzhiblavi/Documents/prog/cpp/code/dgraph/src/texture.cpp > CMakeFiles/dgraph.dir/src/texture.cpp.i
+
+CMakeFiles/dgraph.dir/src/texture.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/dgraph.dir/src/texture.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/dzhiblavi/Documents/prog/cpp/code/dgraph/src/texture.cpp -o CMakeFiles/dgraph.dir/src/texture.cpp.s
 
 # Object files for target dgraph
 dgraph_OBJECTS = \
 "CMakeFiles/dgraph.dir/main.cpp.o" \
-"CMakeFiles/dgraph.dir/context.cpp.o" \
-"CMakeFiles/dgraph.dir/shader.cpp.o"
+"CMakeFiles/dgraph.dir/src/context.cpp.o" \
+"CMakeFiles/dgraph.dir/src/shader.cpp.o" \
+"CMakeFiles/dgraph.dir/src/texture.cpp.o"
 
 # External object files for target dgraph
 dgraph_EXTERNAL_OBJECTS =
 
 dgraph: CMakeFiles/dgraph.dir/main.cpp.o
-dgraph: CMakeFiles/dgraph.dir/context.cpp.o
-dgraph: CMakeFiles/dgraph.dir/shader.cpp.o
+dgraph: CMakeFiles/dgraph.dir/src/context.cpp.o
+dgraph: CMakeFiles/dgraph.dir/src/shader.cpp.o
+dgraph: CMakeFiles/dgraph.dir/src/texture.cpp.o
 dgraph: CMakeFiles/dgraph.dir/build.make
 dgraph: /usr/lib/x86_64-linux-gnu/libOpenGL.so
 dgraph: /usr/lib/x86_64-linux-gnu/libGLX.so
@@ -115,7 +130,7 @@ dgraph: /usr/lib/x86_64-linux-gnu/libGLU.so
 dgraph: /usr/lib/x86_64-linux-gnu/libglut.so
 dgraph: /usr/lib/x86_64-linux-gnu/libGLEW.so
 dgraph: CMakeFiles/dgraph.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/dzhiblavi/Documents/prog/cpp/code/dgraph/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable dgraph"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/dzhiblavi/Documents/prog/cpp/code/dgraph/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable dgraph"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/dgraph.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
