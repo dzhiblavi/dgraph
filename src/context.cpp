@@ -64,7 +64,7 @@ context::context() {
     glfw_init_();
 }
 
-context::~context() {
+void context::exec() {
     for (auto w : vw_)
         w->run_();
 

@@ -224,6 +224,8 @@ int main() {
 
         dgl::window w1(ctx, &attr);
         w1.set_process([&w1] { main_window_loop(w1); });
+
+        ctx.exec();
     } catch (std::exception const& e) {
         std::cerr << "main() failed: " << e.what() << std::endl;
     } catch (...) {

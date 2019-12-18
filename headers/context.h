@@ -65,7 +65,8 @@ private:
 
 public:
     context();
-    ~context();
+
+    void exec();
 };
 }
 
