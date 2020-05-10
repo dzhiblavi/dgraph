@@ -109,6 +109,8 @@ void window::run_() {
 
         errlog("main_loop()", this);
         process_();
+
+        glfwMakeContextCurrent(nullptr);
     });
 }
 
