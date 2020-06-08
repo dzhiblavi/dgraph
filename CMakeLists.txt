@@ -1,26 +1,52 @@
 cmake_minimum_required(VERSION 3.15)
 project(dgraph)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS "ON")
 set(CMAKE_CXX_STANDARD 17)
+
 link_directories(/usr/local/lib)
-find_package(GLEW REQUIRED)
+include_directories(/usr/local/include)
+
+find_package(GLEW   REQUIRED)
 find_package(OpenGL REQUIRED)
-find_package(GLUT REQUIRED)
-include_directories( ${OPENGL_INCLUDE_DIRS}
+find_package(GLUT   REQUIRED)
+find_package(GLM    REQUIRED)
+
+include_directories(
+        ${OPENGL_INCLUDE_DIRS}
         ${GLUT_INCLUDE_DIRS}
-        ${GLEW_INCLUDE_DIRS})
+        ${GLEW_INCLUDE_DIRS}
+        ${GLM_INCLUDE_DIRS})
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -lpthread")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -DDEBUG -D_GCXX_DEBUG")
+include_directories(.)
 
-set(SOURCE lib/stbi_image.hpp
-           src/context.cpp src/shader.cpp src/texture.cpp
-           headers/context.h headers/shader.h headers/texture.h)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG -D_GCXX_DEBUG")
 
-add_executable(dgraph main.cpp ${SOURCE})
+set(LIB_SRC ${PROJECT_SOURCE_DIR}/lib/stb/stb_image.h
+            ${PROJECT_SOURCE_DIR}/lib/json/json.hpp)
+
+set(DGL_SRC ${PROJECT_SOURCE_DIR}/dgl/Shader.cpp
+            ${PROJECT_SOURCE_DIR}/dgl/Texture.cpp
+            ${PROJECT_SOURCE_DIR}/dgl/Context.cpp
+            ${PROJECT_SOURCE_DIR}/dgl/error.cpp
+            ${PROJECT_SOURCE_DIR}/dgl/Shader.h
+            ${PROJECT_SOURCE_DIR}/dgl/Texture.h
+            ${PROJECT_SOURCE_DIR}/dgl/Context.h
+            ${PROJECT_SOURCE_DIR}/dgl/error.h)
+
+set(UTIL_FILES ${PROJECT_SOURCE_DIR}/util/logger.h
+               ${PROJECT_SOURCE_DIR}/util/logger.cpp
+               ${PROJECT_SOURCE_DIR}/util/cargs.h
+               ${PROJECT_SOURCE_DIR}/util/cargs.cpp)
+
+add_executable(dgraph main.cpp
+            ${LIB_SRC}
+            ${DGL_SRC}
+            ${UTIL_FILES})
 
 target_link_libraries(dgraph ${OPENGL_LIBRARIES}
                              ${GLUT_LIBRARY}
                              ${GLEW_LIBRARIES}
-                             glfw pthread)
+                             glfw glew)
 
