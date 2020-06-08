@@ -13,7 +13,7 @@
 
 #include <glm/glm.hpp>
 
-#include "dgl/error.h"
+#include "error.h"
 
 namespace dgl {
 class Shader {
@@ -21,16 +21,21 @@ class Shader {
 
 public:
     Shader(std::string const& file_path, GLuint shader_type);
+
     Shader(char const* source_code, GLuint shader_type);
+
     ~Shader();
 
     Shader& operator=(Shader const&) = delete;
+
     Shader(Shader const&) = delete;
 
     Shader& operator=(Shader&&);
+
     Shader(Shader&&);
 
     void swap(Shader& s);
+
     [[nodiscard]] GLuint native_handle() const noexcept;
 };
 
@@ -59,14 +64,19 @@ public:
     ~GpProg();
 
     GpProg& operator=(GpProg const&) = delete;
+
     GpProg(GpProg const&) = delete;
 
     GpProg& operator=(GpProg&&);
+
     GpProg(GpProg&&);
 
     void swap(GpProg& p);
-    void use();
+
+    GpProg& use();
+
     [[nodiscard]] GLuint native_handle() const noexcept;
+
     [[nodiscard]] GLint uniform_location(std::string const& name);
 };
 }

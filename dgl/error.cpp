@@ -1,4 +1,4 @@
-#include "dgl/error.h"
+#include "error.h"
 
 namespace {
 std::mutex cerr_m;

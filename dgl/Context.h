@@ -29,7 +29,7 @@ public:
     struct Attributes {
         int width = 0;
         int height = 0;
-        std::string const& title{};
+        std::string title{};
         GLFWmonitor* monitor = nullptr;
         GLFWwindow* share = nullptr;
     };
@@ -48,13 +48,30 @@ private:
 public:
     Window(Context& ctx, Attributes const& attr, std::function<void()> const& loop);
 
+    Window& operator=(Window&& w);
+
+    Window(Window&& w);
+
+    Window& operator=(Window const& w) = delete;
+
+    Window(Window const& w) = delete;
+
+    void swap(Window& w);
+
     void run();
+
     void swap_buffers();
+
     void set_default_viewport();
+
     void set_as_main_context();
+
     void poll_events();
+
     void set_close(int flag = 1);
+
     [[nodiscard]] bool should_close();
+
     [[nodiscard]] window_ptr native_handle();
 };
 
@@ -69,13 +86,20 @@ private:
 
 private:
     void add_window(Window* wd);
+
     void poll_events();
 
 public:
     Context();
+
     ~Context();
 
+    Context& operator=(Context const&) = delete;
+
+    Context(Context const&) = delete;
+
     void exec();
+
     void submit(std::function<void()> const& f);
 };
 }

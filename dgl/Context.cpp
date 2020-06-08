@@ -1,4 +1,4 @@
-#include "dgl/Context.h"
+#include "Context.h"
 
 namespace {
 GLFWwindow* glfw_create_window(int w, int h, char const* name
@@ -97,6 +97,25 @@ Window::Window(Context &ctx, Window::Attributes const& attr
     pw = glfw_create_window(attr.width, attr.height, attr.title.c_str(),
                              attr.monitor, attr.share);
     ctx.add_window(this);
+}
+
+Window::Window(Window&& w) {
+    swap(w);
+}
+
+Window& Window::operator=(Window&& w) {
+    if (this != &w) {
+        swap(w);
+    }
+    return *this;
+}
+
+void Window::swap(Window& w) {
+    std::swap(attr, w.attr);
+    std::swap(ctx, w.ctx);
+    std::swap(pw, w.pw);
+    std::swap(main_loop, w.main_loop);
+    std::swap(th, w.th);
 }
 
 void Window::run() {

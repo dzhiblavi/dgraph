@@ -1,4 +1,4 @@
-#include "dgl/Shader.h"
+#include "Shader.h"
 #include <iostream>
 
 namespace {
@@ -88,7 +88,8 @@ GLint GpProg::uniform_location(std::string const& name) {
     return r;
 }
 
-void GpProg::use() {
+GpProg& GpProg::use() {
     glUseProgram(id);
+    return *this;
 }
 } // namespace dgl

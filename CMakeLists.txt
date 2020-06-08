@@ -33,7 +33,8 @@ set(DGL_SRC ${PROJECT_SOURCE_DIR}/dgl/Shader.cpp
             ${PROJECT_SOURCE_DIR}/dgl/Shader.h
             ${PROJECT_SOURCE_DIR}/dgl/Texture.h
             ${PROJECT_SOURCE_DIR}/dgl/Context.h
-            ${PROJECT_SOURCE_DIR}/dgl/error.h)
+            ${PROJECT_SOURCE_DIR}/dgl/buffers.h
+            ${PROJECT_SOURCE_DIR}/dgl/buffers.cpp)
 
 set(UTIL_FILES ${PROJECT_SOURCE_DIR}/util/logger.h
                ${PROJECT_SOURCE_DIR}/util/logger.cpp

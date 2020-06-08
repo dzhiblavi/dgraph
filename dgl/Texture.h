@@ -8,15 +8,23 @@
 #include <GLFW/glfw3.h>
 
 namespace dgl {
-class texture2d {
-    GLuint id_ = 0;
+class Texture {
+public:
+    typedef GLuint native_handle_t;
+
+private:
+    GLuint id = 0;
 
 public:
-    texture2d(std::filesystem::path const& path, bool sRGB = false);
-    ~texture2d();
+    Texture(std::filesystem::path const& path, bool sRGB = false);
 
-    void bind();
-    [[nodiscard]] GLuint native_handle();
+    ~Texture();
+
+    Texture& bind();
+
+    Texture& bind_as(int n);
+
+    [[nodiscard]] native_handle_t native_handle() const noexcept;
 };
 }
 

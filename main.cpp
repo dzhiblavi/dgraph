@@ -7,8 +7,9 @@
 #include "dgl/Context.h"
 #include "dgl/Shader.h"
 #include "dgl/Texture.h"
-
 #include "dgl/error.h"
+#include "dgl/buffers.h"
+
 #include "util/logger.h"
 #include "util/cargs.h"
 
@@ -128,29 +129,16 @@ void main_window_loop(dgl::Window& wd) {
 
         //    GLuint EBO;
         //    glGenBuffers(1, &EBO);
-
-        GLuint VBO;
-        glGenBuffers(1, &VBO);
-
-        GLuint VAO;
-        glGenVertexArrays(1, &VAO);
-
-        glBindVertexArray(VAO);
-
-        glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-        dgl::glCheckError();
-
-        //    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-        //    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-        // position attribute
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *) nullptr);
-        glEnableVertexAttribArray(0);
-        // texture coord attribute
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *) (3 * sizeof(float)));
-        glEnableVertexAttribArray(1);
+    
+        dgl::VAO vao;
+        vao.bind().vbo().bind()
+            .buffer_data(vertices, sizeof(vertices), GL_STATIC_DRAW);
+        vao.setup_attribute({0, 3, GL_FLOAT, GL_FALSE
+                    , 5 * sizeof(float), (void *) nullptr})
+            .setup_attribute({1, 3, GL_FLOAT, GL_FALSE
+                    , 5 * sizeof(float), (void *) (3 * sizeof(float))})
+            .enable_attribute(0)
+            .enable_attribute(1);
 
         dgl::glCheckError();
 
@@ -160,13 +148,11 @@ void main_window_loop(dgl::Window& wd) {
 
         dgl::glCheckError();
 
-        dgl::texture2d brick(path / std::string("assets/textures/container.jpg"));
-        dgl::texture2d face(path / std::string("assets/textures/face.jpg"));
+        dgl::Texture brick(path / std::string("assets/textures/container.jpg"));
+        dgl::Texture face(path / std::string("assets/textures/face.jpg"));
 
-        glActiveTexture(GL_TEXTURE0);
-        brick.bind();
-        glActiveTexture(GL_TEXTURE1);
-        face.bind();
+        brick.bind_as(0);
+        face.bind_as(1);
 
         def_prog.use();
 
@@ -208,7 +194,7 @@ void main_window_loop(dgl::Window& wd) {
             view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
             glUniformMatrix4fv(viewid, 1, GL_FALSE, glm::value_ptr(view));
 
-            glBindVertexArray(VAO);
+            vao.bind();
             for (GLuint i = 0; i < 10; i++) {
                 glm::mat4 model(1.f);
                 model = glm::translate(model, cubePositions[i]);
@@ -223,10 +209,6 @@ void main_window_loop(dgl::Window& wd) {
             wd.swap_buffers();
         }
 
-        glDeleteVertexArrays(1, &VAO);
-        glDeleteBuffers(1, &VBO);
-        //    glDeleteBuffers(1, &EBO);
-        //
         dgl::glCheckError();
     } catch (std::runtime_error const& re) {
         std::cerr << "Error occured in loop: " << re.what() << std::endl;
