@@ -26,6 +26,10 @@ public:
     FpsCamera& apply_move();
 
     glm::mat4 lookAt() const noexcept;
+
+    glm::vec3& position() noexcept;
+
+    glm::vec3& direction() noexcept;
 };
 } // namespace dgl
 

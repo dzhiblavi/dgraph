@@ -51,4 +51,13 @@ FpsCamera& FpsCamera::apply_move() {
 glm::mat4 FpsCamera::lookAt() const noexcept {
     return glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 }
+
+glm::vec3& FpsCamera::position() noexcept {
+    return cameraPos;
+}
+
+glm::vec3& FpsCamera::direction() noexcept {
+    return cameraFront;
+}
 } // namespace dgl
+
