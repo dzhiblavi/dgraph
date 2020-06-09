@@ -16,6 +16,7 @@ GLuint init(char const* source_code, GLuint shader_type) {
         DGL_EXC("shader creation failed: " + std::string(infoLog));
     }
 
+    dgl::glCheckError();
     return id;
 }
 } // namespace

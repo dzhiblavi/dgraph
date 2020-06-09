@@ -2,6 +2,7 @@
 #define DGRAPH_CONTEXT_H
 
 #include <vector>
+#include <unordered_map>
 #include <queue>
 #include <iostream>
 #include <string>
@@ -16,6 +17,10 @@
 
 #include "dgl/error.h"
 
+#include "util/cb_signal.h"
+#include "util/cargs.h"
+#include "util/timer.h"
+
 namespace dgl {
 class Context;
 
@@ -25,6 +30,10 @@ class Window {
 public:
     typedef GLFWwindow  window_t;
     typedef GLFWwindow* window_ptr;
+    typedef std::function<void(int, int, int, int)> key_cb_t;
+    typedef std::function<void(double, double)> cur_cb_t;
+    typedef cb_signal<int, int, int, int> key_sig_t;
+    typedef cb_signal<double, double> cur_sig_t;
 
     struct Attributes {
         int width = 0;
@@ -34,19 +43,25 @@ public:
         GLFWwindow* share = nullptr;
     };
 
-private:
+protected:
     Attributes attr;
     Context* ctx = nullptr;
     window_ptr pw = nullptr;
-    std::function<void()> main_loop{};
-    std::thread th{};
 
 private:
-    void process();
+    std::thread th{};
+    bool keys[512]{false};
+    key_sig_t key_sig;
+    cur_sig_t cur_sig;
+
+protected:
+    virtual void process() = 0;
+
+private:
     void stop();
 
 public:
-    Window(Context& ctx, Attributes const& attr, std::function<void()> const& loop);
+    Window(Attributes const& attr);
 
     Window& operator=(Window&& w);
 
@@ -70,6 +85,16 @@ public:
 
     void set_close(int flag = 1);
 
+    void key_callback(int key, int scancode, int action, int mode);
+
+    void cur_callback(double xpos, double ypos);
+
+    key_sig_t::connection reg_key_cb(key_cb_t const& cb);
+
+    cur_sig_t::connection reg_cur_cb(cur_cb_t const& cb);
+
+    bool pressed(int key) const noexcept;
+
     [[nodiscard]] bool should_close();
 
     [[nodiscard]] window_ptr native_handle();
@@ -79,18 +104,22 @@ class Context {
     friend class Window;
 
 private:
-    std::vector<Window*> windows;
+    std::unordered_map<Window::window_ptr, Window*> windows;
     std::mutex m;
     std::queue<std::function<void()>> q;
     std::condition_variable poll_cv;
+    timer tm;
+    tmnl::cargs args_;
 
 private:
     void add_window(Window* wd);
 
     void poll_events();
 
+    int call_and_timeout() noexcept;
+
 public:
-    Context();
+    Context(int argc, char** argv);
 
     ~Context();
 
@@ -101,7 +130,16 @@ public:
     void exec();
 
     void submit(std::function<void()> const& f);
+
+    timer& get_timer() noexcept;
+
+    tmnl::cargs const& args() const noexcept;
+
+    Window* get_window(Window::window_ptr p);
 };
+
+Context* get_current_context() noexcept;
 }
+
 
 #endif //DGRAPH_CONTEXT_H

@@ -58,6 +58,15 @@ public:
         load_shaders(std::forward<S>(ss)...);
 
         glLinkProgram(id);
+
+        GLint success;
+        glGetProgramiv(id, GL_LINK_STATUS, &success);
+        if (!success) {
+            GLchar infoLog[512];
+            glGetProgramInfoLog(id, 512, nullptr, infoLog);
+            DGL_EXC("program linkage failed: " + std::string(infoLog));
+        }
+
         glCheckError();
     }
 

@@ -29,7 +29,6 @@ public:
 
 private:
     GLuint id = 0;
-    VBO bo{};
 
 public:
     struct Attribute {
@@ -46,13 +45,27 @@ public:
 
     VAO& bind();
 
-    VBO& vbo() noexcept;
-
-    VBO const& vbo() const noexcept;
-
     VAO& setup_attribute(Attribute const& attr);
 
     VAO& enable_attribute(int n);
+
+    [[nodiscard]] native_handle_t native_handle() const noexcept;
+};
+
+
+class EBO {
+public:
+    typedef GLuint native_handle_t;
+
+private:
+    GLuint id = 0;
+
+public:
+    EBO();
+
+    EBO& bind();
+
+    EBO& buffer_data(void const* data, size_t size, GLenum usage);
 
     [[nodiscard]] native_handle_t native_handle() const noexcept;
 };
