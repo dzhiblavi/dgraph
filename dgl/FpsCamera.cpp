@@ -35,7 +35,7 @@ FpsCamera::FpsCamera(Window& w)
 }
 
 FpsCamera& FpsCamera::apply_move() {
-    GLfloat cameraSpeed = 0.05f;
+    GLfloat cameraSpeed = 0.15f;
     if (window->pressed(GLFW_KEY_W))
         cameraPos += cameraSpeed * cameraFront;
     if (window->pressed(GLFW_KEY_S))

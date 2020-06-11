@@ -57,6 +57,10 @@ public:
     void swap(Mesh& m);
 
     void draw(GpProg& prog);
+
+    void bindVao();
+
+    std::vector<uint> const& indices() const noexcept;
 };
 
 class Model {
@@ -76,6 +80,10 @@ public:
     Model(std::filesystem::path const& p);
 
     void draw(GpProg& prog);
+
+    std::vector<Mesh>& meshes() noexcept;
+
+    std::vector<Mesh> const& meshes() const noexcept;
 };
 } // namespace dgl
 

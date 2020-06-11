@@ -49,27 +49,24 @@ void model_window::process() {
 
         dgl::Shader light_vert(path / std::string("assets/shaders/vert.glsl"), GL_VERTEX_SHADER);
         dgl::Shader light_frag(path / std::string("assets/shaders/light-frag.glsl"), GL_FRAGMENT_SHADER);
-        dgl::GpProg light_prog(light_vert, light_frag);
-
         dgl::Shader model_vert(path / std::string("assets/shaders/model/vert.glsl"), GL_VERTEX_SHADER);
         dgl::Shader model_frag(path / std::string("assets/shaders/model/frag.glsl"), GL_FRAGMENT_SHADER);
-        dgl::GpProg model_prog(model_vert, model_frag);
-
         dgl::Shader norm_vert(path / std::string("assets/shaders/model/normal-vert.glsl"), GL_VERTEX_SHADER);
         dgl::Shader norm_frag(path / std::string("assets/shaders/model/normal-frag.glsl"), GL_FRAGMENT_SHADER);
         dgl::Shader norm_geo(path / std::string("assets/shaders/model/normal-geo.glsl"), GL_GEOMETRY_SHADER);
+
+        dgl::GpProg light_prog(light_vert, light_frag);
+        dgl::GpProg model_prog(model_vert, model_frag);
         dgl::GpProg norm_prog(norm_vert, norm_frag, norm_geo);
-
-        dgl::glCheckError();
-
-        glm::mat4 projection(1.f);
-        projection = glm::perspective(45.0f, 800.f / 600.f, 0.1f, 100.0f);
 
         dgl::Model lamp(path / "assets/objects/white-box/white-box.obj");
         dgl::Model cyborg(path / "assets/objects/cyborg/cyborg.obj");
         dgl::Model box(path / "assets/objects/box/box.obj");
         dgl::Model ground(path / "assets/objects/brick-ground/brick-ground.obj");
 
+        dgl::glCheckError();
+        glm::mat4 projection(1.f);
+        projection = glm::perspective(45.0f, 800.f / 600.f, 0.1f, 100.0f);
         int nd = 1, np = 1, ns = 1;
 
         light_prog.use();
@@ -195,7 +192,7 @@ void model_window::process() {
         }
 
         std::chrono::duration<double> dur = std::chrono::steady_clock::now() - st;
-        std::cout << "FPS: " << (1. * frames) / dur.count() << std::endl;
+        dgl::errlog("FPS", (1. * frames) / dur.count());
 
         dgl::glCheckError();
     } catch (std::runtime_error const& re) {

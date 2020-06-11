@@ -55,6 +55,8 @@ add_executable(dgraph
             ${PROJECT_SOURCE_DIR}/main.cpp
             ${PROJECT_SOURCE_DIR}/model_window.h
             ${PROJECT_SOURCE_DIR}/model_window.cpp
+            ${PROJECT_SOURCE_DIR}/space_window.h
+            ${PROJECT_SOURCE_DIR}/space_window.cpp
             ${LIB_SRC}
             ${DGL_SRC}
             ${UTIL_FILES})

@@ -86,6 +86,14 @@ void Mesh::draw(GpProg& prog) {
     glCheckError();
 }
 
+void Mesh::bindVao() {
+    vao.bind();
+}
+
+std::vector<uint> const& Mesh::indices() const noexcept {
+    return is;
+}
+
 
 Model::Model(std::filesystem::path const& p) {
     Assimp::Importer importer;
@@ -202,5 +210,13 @@ void Model::draw(GpProg& prog) {
     for (auto& m : ms) {
         m.draw(prog);
     }
+}
+
+std::vector<Mesh>& Model::meshes() noexcept {
+    return ms;
+}
+
+std::vector<Mesh> const& Model::meshes() const noexcept {
+    return ms;
 }
 } // namespace dgl

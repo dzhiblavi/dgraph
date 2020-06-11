@@ -71,12 +71,14 @@ public:
 
     void bind();
 
-    void unbind();
+    static void unbind();
 
-    void setupAttribute(GLuint index, GLint size, GLenum type
+    static void setupAttribute(GLuint index, GLint size, GLenum type
             , GLboolean norm, GLsizei stride, void const* offset);
 
-    void enableAttribute(int n);
+    static void enableAttribute(int n);
+
+    static void divisor(GLuint index, GLuint divisor);
 
     [[nodiscard]] native_handle_t native_handle() const noexcept;
 };

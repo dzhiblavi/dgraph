@@ -91,6 +91,10 @@ void VAO::enableAttribute(int n) {
     glEnableVertexAttribArray(n);
 }
 
+void VAO::divisor(GLuint index, GLuint divisor) {
+    glVertexAttribDivisor(index, divisor);
+}
+
 VAO::native_handle_t VAO::native_handle() const noexcept {
     return id;
 }
