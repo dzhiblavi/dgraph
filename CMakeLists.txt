@@ -36,6 +36,9 @@ set(DGL_SRC ${PROJECT_SOURCE_DIR}/dgl/Shader.h
             ${PROJECT_SOURCE_DIR}/dgl/error.cpp
             ${PROJECT_SOURCE_DIR}/dgl/buffers.h
             ${PROJECT_SOURCE_DIR}/dgl/buffers.cpp
+            ${PROJECT_SOURCE_DIR}/dgl/Model.h
+            ${PROJECT_SOURCE_DIR}/dgl/Model.cpp
+            ${PROJECT_SOURCE_DIR}/dgl/GpProgFrame.h
             ${PROJECT_SOURCE_DIR}/dgl/FpsCamera.h
             ${PROJECT_SOURCE_DIR}/dgl/FpsCamera.cpp)
 
@@ -52,6 +55,8 @@ add_executable(dgraph
             ${PROJECT_SOURCE_DIR}/main.cpp
             ${PROJECT_SOURCE_DIR}/app_window.h
             ${PROJECT_SOURCE_DIR}/app_window.cpp
+            ${PROJECT_SOURCE_DIR}/model_window.h
+            ${PROJECT_SOURCE_DIR}/model_window.cpp
             ${LIB_SRC}
             ${DGL_SRC}
             ${UTIL_FILES})
@@ -59,5 +64,5 @@ add_executable(dgraph
 target_link_libraries(dgraph ${OPENGL_LIBRARIES}
                              ${GLUT_LIBRARY}
                              ${GLEW_LIBRARIES}
-                             glfw glew)
+                             glfw glew assimp)
 

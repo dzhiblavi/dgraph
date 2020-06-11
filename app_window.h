@@ -12,7 +12,7 @@
 #include "dgl/buffers.h"
 #include "dgl/FpsCamera.h"
 
-class window : dgl::Window {
+class app_window : dgl::Window {
 private:
     dgl::FpsCamera camera;
 
@@ -20,7 +20,7 @@ private:
     void process() override;
 
 public:
-    window(dgl::Window::Attributes attrs);
+    app_window(dgl::Window::Attributes attrs);
 };
 
 #endif // DGL_APP_WINDOW

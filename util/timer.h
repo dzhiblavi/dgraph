@@ -21,12 +21,15 @@ private:
 public:
     timer() noexcept = default;
 
-    void add(timer_unit* e);
-    void remove(timer_unit* e) noexcept;
+    void add(timer_unit& e);
+
+    void remove(timer_unit& e) noexcept;
+
+    void callback(time_point_t base) noexcept;
 
     [[nodiscard]] bool empty() const noexcept;
+
     [[nodiscard]] time_point_t top() const noexcept;
-    void callback(time_point_t base) noexcept;
 
     static time_point_t current_time();
 };
@@ -44,14 +47,19 @@ private:
 
 public:
     timer_unit() = default;
-    timer_unit(timer* timer, time_point_t wpoint, callback_t callback);
+
+    timer_unit(timer& timer, time_point_t wpoint, callback_t callback);
+
     ~timer_unit();
 
     timer_unit(timer_unit&& tu);
+
     timer_unit& operator=(timer_unit&&);
 
     void reset(timer& t, time_point_t tp);
+
     void reset(time_point_t tp);
+
     void callback();
 };
 

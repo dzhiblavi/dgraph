@@ -4,68 +4,79 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include "error.h"
+
 namespace dgl {
-class VBO {
+class Buffer {
 public:
     typedef GLuint native_handle_t;
 
-private:
-    GLuint id = 0;
+protected:
+    native_handle_t id = 0;
 
 public:
-    VBO();
+    Buffer();
 
-    VBO& bind();
+    Buffer(native_handle_t id);
 
-    VBO& buffer_data(void const* data, size_t size, GLenum usage);
+    ~Buffer();
+
+    Buffer(Buffer const&) = delete;
+
+    Buffer& operator=(Buffer const&) = delete;
+
+    Buffer(Buffer&& b);
+
+    Buffer& operator=(Buffer&& b);
+
+    void swap(Buffer& b);
+
+    void bind(GLenum target);
+
+    static void unbind(GLenum target);
+
+    static void bufferData(GLenum target, void const* data, size_t size, GLenum usage);
+
+    static void bufferStorage(GLenum target, void const* data, size_t size, GLbitfield flags);
+
+    static void bufferSubData(GLenum target, void const* data, size_t size, GLintptr offset);
+
+    static void clearData(GLenum target, GLenum internalf, GLenum format
+            , GLenum type, void const* data);
+
+    static void clearSubData(GLenum target, GLenum internalformat, GLintptr offset
+            , GLsizeiptr size, GLenum format, GLenum type, void const* data);
+
+    static void* map(GLenum target, GLbitfield access);
+
+    static void unmap(GLenum target);
 
     [[nodiscard]] native_handle_t native_handle() const noexcept;
-};
 
+    static void copy(Buffer const& src, Buffer& dst, GLintptr readoffset
+        , GLintptr writeoffset, GLsizeiptr size);
+};
 
 class VAO {
 public:
     typedef GLuint native_handle_t;
 
 private:
-    GLuint id = 0;
-
-public:
-    struct Attribute {
-        GLuint index = 0;
-        GLint size = 0;
-        GLenum type = GL_FLOAT;
-        GLboolean normalized = GL_FALSE;
-        GLsizei stride = 0;
-        const void* offset = nullptr;
-    };
+    native_handle_t id = 0;
 
 public:
     VAO();
 
-    VAO& bind();
+    ~VAO();
 
-    VAO& setup_attribute(Attribute const& attr);
+    void bind();
 
-    VAO& enable_attribute(int n);
+    void unbind();
 
-    [[nodiscard]] native_handle_t native_handle() const noexcept;
-};
+    void setupAttribute(GLuint index, GLint size, GLenum type
+            , GLboolean norm, GLsizei stride, void const* offset);
 
-
-class EBO {
-public:
-    typedef GLuint native_handle_t;
-
-private:
-    GLuint id = 0;
-
-public:
-    EBO();
-
-    EBO& bind();
-
-    EBO& buffer_data(void const* data, size_t size, GLenum usage);
+    void enableAttribute(int n);
 
     [[nodiscard]] native_handle_t native_handle() const noexcept;
 };

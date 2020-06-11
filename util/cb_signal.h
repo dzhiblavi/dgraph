@@ -11,18 +11,37 @@ public:
 
     class connection {
         typename cbs_t::iterator it;
-        cb_signal* sig;
+        cb_signal* sig = nullptr;
 
     public:
+        connection() = default;
+
         connection(typename cbs_t::iterator it, cb_signal* sig)
             : it(it), sig(sig) {}
 
+        connection(connection const& c) 
+            : it(c.it), sig(c.sig) {}
+
+        connection& operator=(connection const& c) {
+            if (this != &c) {
+                it = c.it;
+                sig = c.sig;
+            }
+            return *this;
+        }
+
         void disconnect() {
+            if (nullptr == sig) {
+                return;
+            }
+
             if (0 < sig->emitting) {
                 *it = cb_t();
             } else {
                 sig->cbs.erase(it);
             }
+
+            sig = nullptr;
         }
     };
 

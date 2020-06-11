@@ -16,7 +16,15 @@ private:
     GLuint id = 0;
 
 public:
-    Texture(std::filesystem::path const& path, bool sRGB = false);
+    Texture(native_handle_t handle);
+
+    Texture(Texture const&) = delete;
+
+    Texture& operator=(Texture const&) = delete;
+
+    Texture(Texture&&);
+
+    Texture& operator=(Texture&&);
 
     ~Texture();
 
@@ -25,6 +33,8 @@ public:
     Texture& bind_as(int n);
 
     [[nodiscard]] native_handle_t native_handle() const noexcept;
+
+    static Texture load_texture2d(std::filesystem::path const& path, bool sRGB = false);
 };
 }
 

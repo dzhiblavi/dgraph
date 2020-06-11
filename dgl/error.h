@@ -14,7 +14,7 @@ struct error : std::runtime_error {
     using std::runtime_error::what;
 };
 
-#define CHECK_ERROR_VERBOSE
+//#define CHECK_ERROR_VERBOSE
 
 #define EQSTR(X) #X + "=" + std::string(X)
 
@@ -56,7 +56,7 @@ void errlog_impl_();
 
 template <typename T, typename... Args>
 void errlog_impl_(T&& t, Args&&... args) {
-    std::cerr << t << std::endl;
+    std::cerr << t << ", ";
     errlog_impl_(std::forward<Args>(args)...);
 }
 
@@ -64,7 +64,9 @@ void errlog_impl_(T&& t, Args&&... args) {
 template <typename... Args>
 void errlog(Args&&... args) {
     auto lock = stderr_lock();
+    std::cerr << "{";
     errlog_impl_(std::forward<Args>(args)...);
+    std::cerr << "\b\b}" << std::endl;
 }
 #else
 void errlog(...) {}

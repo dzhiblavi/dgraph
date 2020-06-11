@@ -28,11 +28,6 @@ void glew_init_() {
     glewInit();
     glGetError();
     dgl::glCheckError();
-
-//#ifdef DEBUG
-//    glEnable(GL_DEBUG_OUTPUT);
-//    glDebugMessageCallback(dgl::glErrorCallback, nullptr);
-//#endif
 }
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode) {

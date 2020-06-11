@@ -1,7 +1,7 @@
 #include "app_window.h"
 #include "dgl/error.h"
 
-window::window(dgl::Window::Attributes attrs)
+app_window::app_window(dgl::Window::Attributes attrs)
     : dgl::Window(attrs)
     , camera(*this) {
     glfwSetInputMode(native_handle(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -12,7 +12,7 @@ window::window(dgl::Window::Attributes attrs)
     });
 }
 
-void window::process() {
+void app_window::process() {
     float vertices[] = {
         -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
          0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  0.0f,
@@ -87,23 +87,23 @@ void window::process() {
     try {
         glEnable(GL_DEPTH_TEST);
 
-        dgl::VBO vbo;
+        dgl::Buffer vbo;
         dgl::VAO vao;
 
         vao.bind();
-        vbo.bind()
-            .buffer_data(vertices, sizeof(vertices), GL_STATIC_DRAW);
+        vbo.bind(GL_ARRAY_BUFFER);
+        dgl::Buffer::bufferData(GL_ARRAY_BUFFER, vertices, sizeof(vertices)
+                , GL_STATIC_DRAW);
 
-        vao.setup_attribute({0, 3, GL_FLOAT, GL_FALSE
-                    , 8 * sizeof(float), (void *) nullptr})
-            .setup_attribute({1, 3, GL_FLOAT, GL_FALSE
-                    , 8 * sizeof(float), (void *) (3 * sizeof(float))})
-            .setup_attribute({2, 2, GL_FLOAT, GL_FALSE
-                    , 8 * sizeof(float), (void *) (6 * sizeof(float))})
-            .enable_attribute(0)
-            .enable_attribute(1)
-            .enable_attribute(2);
-
+        vao.setupAttribute(0, 3, GL_FLOAT, GL_FALSE
+                    , 8 * sizeof(float), (void *) nullptr);
+        vao.setupAttribute(1, 3, GL_FLOAT, GL_FALSE
+                    , 8 * sizeof(float), (void *) (3 * sizeof(float)));
+        vao.setupAttribute(2, 2, GL_FLOAT, GL_FALSE
+                    , 8 * sizeof(float), (void *) (6 * sizeof(float)));
+        vao.enableAttribute(0);
+        vao.enableAttribute(1);
+        vao.enableAttribute(2);
         dgl::glCheckError();
 
         std::filesystem::path path = std::filesystem::path(ctx->args().getStr("path"))
@@ -120,8 +120,8 @@ void window::process() {
         dgl::glCheckError();
 
         //
-        dgl::Texture box_diffuse(path / "assets/textures/box-diff.png");
-        dgl::Texture box_specular(path / "assets/textures/box-spec.png");
+        dgl::Texture box_diffuse = dgl::Texture::load_texture2d(path / "assets/textures/box-diff.png");
+        dgl::Texture box_specular = dgl::Texture::load_texture2d(path / "assets/textures/box-spec.png");
 
         box_diffuse.bind_as(0);
         box_specular.bind_as(1);
