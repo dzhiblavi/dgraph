@@ -182,11 +182,11 @@ std::vector<std::shared_ptr<ModelTexture>> Model::load_material_textures(aiMater
     for (uint i = 0; i < mat->GetTextureCount(type); i++) {
         aiString str;
         mat->GetTexture(type, i, &str);
-        errlog(dir / str.C_Str());
 
         std::filesystem::path p = dir / str.C_Str();
         auto it = tx_cache.find(p);
         if (it == tx_cache.end()) {
+            errlog("Loading texture", dir / str.C_Str());
             auto pr = tx_cache.insert({p, std::make_shared<ModelTexture>(
                         Texture::load_texture2d(p), ttype)});
             textures.push_back(pr.first->second);

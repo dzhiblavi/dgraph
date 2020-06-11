@@ -53,8 +53,6 @@ set(UTIL_FILES ${PROJECT_SOURCE_DIR}/util/logger.h
 
 add_executable(dgraph 
             ${PROJECT_SOURCE_DIR}/main.cpp
-            ${PROJECT_SOURCE_DIR}/app_window.h
-            ${PROJECT_SOURCE_DIR}/app_window.cpp
             ${PROJECT_SOURCE_DIR}/model_window.h
             ${PROJECT_SOURCE_DIR}/model_window.cpp
             ${LIB_SRC}

@@ -6,7 +6,6 @@
 #include "util/logger.h"
 #include "util/cargs.h"
 
-#include "app_window.h"
 #include "model_window.h"
 
 int main(int argc, char** argv) {
@@ -14,8 +13,7 @@ int main(int argc, char** argv) {
 
     try {
         dgl::Context ctx(argc, argv);
-        //app_window w1({1600, 1200, "Window 1", nullptr, nullptr});
-        model_window w2({1600, 1200, "Window 2", nullptr, nullptr});
+        model_window w2({1600, 1200, "Window 1", nullptr, nullptr});
         ctx.exec();
     } catch (std::exception const& e) {
         lout << tmnl::fclr::RED << tmnl::fmt::BOLD << "main() failed with error: " 
