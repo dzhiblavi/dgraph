@@ -38,6 +38,8 @@ set(DGL_SRC ${PROJECT_SOURCE_DIR}/dgl/Shader.h
             ${PROJECT_SOURCE_DIR}/dgl/buffers.cpp
             ${PROJECT_SOURCE_DIR}/dgl/Model.h
             ${PROJECT_SOURCE_DIR}/dgl/Model.cpp
+            ${PROJECT_SOURCE_DIR}/dgl/FrameBuffer.h
+            ${PROJECT_SOURCE_DIR}/dgl/FrameBuffer.cpp
             ${PROJECT_SOURCE_DIR}/dgl/GpProgFrame.h
             ${PROJECT_SOURCE_DIR}/dgl/FpsCamera.h
             ${PROJECT_SOURCE_DIR}/dgl/FpsCamera.cpp)

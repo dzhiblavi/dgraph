@@ -35,6 +35,10 @@ public:
     [[nodiscard]] native_handle_t native_handle() const noexcept;
 
     static Texture load_texture2d(std::filesystem::path const& path, bool sRGB = false);
+
+    static Texture genDepthTex2d(size_t width, size_t height);
+
+    static Texture genDepthTexCube(size_t width, size_t height);
 };
 }
 

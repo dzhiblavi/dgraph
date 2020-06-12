@@ -14,6 +14,7 @@
 #include "dgl/Model.h"
 #include "dgl/error.h"
 #include "dgl/GpProgFrame.h"
+#include "dgl/FrameBuffer.h"
 
 #include "util/cb_signal.h"
 #include "util/timer.h"
@@ -23,7 +24,10 @@ private:
     dgl::FpsCamera camera;
     bool outline = false;
     bool normals = false;
+    bool pointLight = false;
     float global_size = 1.f;
+    float xpos = 26.f, ypos = 24.f, zpos = 20.5f;
+    float chspeed = 0.3;
 
 private:
     void process() override;

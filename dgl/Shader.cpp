@@ -134,45 +134,20 @@ GpProg::ass_helper GpProg::ass_helper::operator[](std::string const& field) {
     return get(field);
 }
 
-GpProg::ass_helper& GpProg::ass_helper::operator=(float x) {
-    glUniform1f(id(), x);
-    glCheckError();
-    return *this;
+#define DGL_ASS_DCL(type, suff, ...) \
+GpProg::ass_helper& GpProg::ass_helper::operator=(type x) { \
+    glUniform ## suff (id(), __VA_ARGS__); \
+    glCheckError(); \
+    return *this; \
 }
 
-GpProg::ass_helper& GpProg::ass_helper::operator=(int x) {
-    glUniform1i(id(), x);
-    glCheckError();
-    return *this;
-}
+DGL_ASS_DCL(float, 1f, x)
+DGL_ASS_DCL(int, 1i, x)
+DGL_ASS_DCL(uint, 1f, x)
 
-GpProg::ass_helper& GpProg::ass_helper::operator=(uint x) {
-    glUniform1ui(id(), x);
-    glCheckError();
-    return *this;
-}
+DGL_ASS_DCL(glm::vec2 const&, 2fv, 1, glm::value_ptr(x))
+DGL_ASS_DCL(glm::vec3 const&, 3fv, 1, glm::value_ptr(x))
 
-GpProg::ass_helper& GpProg::ass_helper::operator=(glm::vec2 const& x) {
-    glUniform2fv(id(), 1, glm::value_ptr(x));
-    glCheckError();
-    return *this;
-}
-
-GpProg::ass_helper& GpProg::ass_helper::operator=(glm::vec3 const& x) {
-    glUniform3fv(id(), 1, glm::value_ptr(x));
-    glCheckError();
-    return *this;
-}
-
-GpProg::ass_helper& GpProg::ass_helper::operator=(glm::mat3x3 const& x) {
-    glUniformMatrix3fv(id(), 1, GL_FALSE, glm::value_ptr(x));
-    glCheckError();
-    return *this;
-}
-
-GpProg::ass_helper& GpProg::ass_helper::operator=(glm::mat4x4 const& x) {
-    glUniformMatrix4fv(id(), 1, GL_FALSE, glm::value_ptr(x));
-    glCheckError();
-    return *this;
-}
+DGL_ASS_DCL(glm::mat3x3 const&, Matrix3fv, 1, GL_FALSE, glm::value_ptr(x))
+DGL_ASS_DCL(glm::mat4x4 const&, Matrix4fv, 1, GL_FALSE, glm::value_ptr(x))
 } // namespace dgl
