@@ -12,21 +12,6 @@ model_window::model_window(dgl::Window::Attributes attrs)
     });
 
     reg_key_cb([this] (int key, int scancode, int action, int mode) {
-        if (key == GLFW_KEY_T && action == GLFW_PRESS)
-            outline ^= 1;
-    });
-
-    reg_key_cb([this] (int key, int scancode, int action, int mode) {
-        if (key == GLFW_KEY_V && action == GLFW_PRESS)
-            pointLight ^= 1;
-    });
-
-    reg_key_cb([this] (int key, int scancode, int action, int mode) {
-        if (key == GLFW_KEY_N && action == GLFW_PRESS)
-            normals ^= 1;
-    });
-
-    reg_key_cb([this] (int key, int scancode, int action, int mode) {
         if (key == GLFW_KEY_UP && action == GLFW_PRESS)
             global_size += 0.03f;
         else if (key == GLFW_KEY_DOWN && action == GLFW_PRESS)
@@ -92,32 +77,44 @@ void model_window::process() {
 
         dgl::Shader light_vert(path / std::string("assets/shaders/vert.glsl"), GL_VERTEX_SHADER);
         dgl::Shader light_frag(path / std::string("assets/shaders/light-frag.glsl"), GL_FRAGMENT_SHADER);
-        dgl::Shader model_vert(path / std::string("assets/shaders/model/vert.glsl"), GL_VERTEX_SHADER);
-        dgl::Shader model_frag(path / std::string("assets/shaders/model/frag.glsl"), GL_FRAGMENT_SHADER);
+        dgl::Shader model_vert(path / std::string("assets/shaders/model/shadow-vert.glsl"), GL_VERTEX_SHADER);
+        dgl::Shader model_frag(path / std::string("assets/shaders/model/shadow-frag.glsl"), GL_FRAGMENT_SHADER);
         dgl::Shader norm_vert(path / std::string("assets/shaders/model/normal-vert.glsl"), GL_VERTEX_SHADER);
         dgl::Shader norm_frag(path / std::string("assets/shaders/model/normal-frag.glsl"), GL_FRAGMENT_SHADER);
         dgl::Shader norm_geo(path / std::string("assets/shaders/model/normal-geo.glsl"), GL_GEOMETRY_SHADER);
         dgl::Shader depth_frag(path / std::string("assets/shaders/depth/2d-frag.glsl"), GL_FRAGMENT_SHADER);
         dgl::Shader depth_vert(path / std::string("assets/shaders/depth/2d-vert.glsl"), GL_VERTEX_SHADER);
+        dgl::Shader text_frag(path / std::string("assets/shaders/text/frag.glsl"), GL_FRAGMENT_SHADER);
+        dgl::Shader text_vert(path / std::string("assets/shaders/text/vert.glsl"), GL_VERTEX_SHADER);
+        dgl::Shader sb_frag(path / std::string("assets/shaders/skybox/frag.glsl"), GL_FRAGMENT_SHADER);
+        dgl::Shader sb_vert(path / std::string("assets/shaders/skybox/vert.glsl"), GL_VERTEX_SHADER);
 
         dgl::GpProg light_prog(light_vert, light_frag);
         dgl::GpProg model_prog(model_vert, model_frag);
         dgl::GpProg norm_prog(norm_vert, norm_frag, norm_geo);
         dgl::GpProg depth_prog(depth_frag, depth_vert);
+        dgl::GpProg text_prog(text_frag, text_vert);
+        dgl::GpProg sb_prog(sb_frag, sb_vert);
 
         dgl::Model lamp(path / "assets/objects/white-box/white-box.obj");
         dgl::Model cyborg(path / "assets/objects/cyborg/cyborg.obj");
         dgl::Model box(path / "assets/objects/box/box.obj");
         dgl::Model ground(path / "assets/objects/brick-ground/brick-ground.obj");
 
+        text_prog.use();
+        text_prog["projection"] = glm::ortho(0.0f, 1600.0f, 0.0f, 1200.0f);
+        text_prog["text"] = 0;
+
         dgl::glCheckError();
         glm::mat4 projection(1.f);
         projection = glm::perspective(45.0f, 800.f / 600.f, 0.1f, 100.0f);
         int nd = 1, np = 1, ns = 0;
 
-
         light_prog.use();
         light_prog["projection"] = projection;
+
+        sb_prog.use();
+        sb_prog["projection"] = projection;
 
         model_prog.use();
         model_prog["projection"] = projection;
@@ -151,15 +148,6 @@ void model_window::process() {
             setup_light(light);
         }
 
-        int i = 0;
-        auto spotLight = model_prog["spotLights"][i];
-        setup_light(spotLight);
-        spotLight["cutOff"] = glm::cos(glm::radians(12.5f));
-        spotLight["outerCutOff"] = glm::cos(glm::radians(15.f));
-        spotLight["constant"] = 1.f;
-        spotLight["linear"] = 0.09f;
-        spotLight["quadratic"] = 0.032f;
-
         const uint shadowWidth = 1600;
         const uint shadowHeight = 1600;
         dgl::FrameBuffer shadowFB;
@@ -170,6 +158,9 @@ void model_window::process() {
             glDrawBuffer(GL_NONE);
             glReadBuffer(GL_NONE);
             dgl::FrameBuffer::reset(GL_FRAMEBUFFER);
+            glActiveTexture(GL_TEXTURE0 + 15);
+            shadowMap.bind();
+            glActiveTexture(GL_TEXTURE0);
         }
 
         auto render = [&] (bool drawl, glm::mat4 const& model
@@ -199,28 +190,21 @@ void model_window::process() {
                     mp["model"] = m;
                     box.draw(mp);
                 }
-
-                if (normals) {
-                    norm_prog.use();
-                    norm_prog["model"] = model;
-                    cyborg.draw(norm_prog);
-
-                    for (auto const& m : boxModels) {
-                        norm_prog["model"] = m;
-                        box.draw(norm_prog);
-                    }
-                }
             }
         };
 
         glEnable(GL_MULTISAMPLE);
         glEnable(GL_STENCIL_TEST);
         glEnable(GL_CULL_FACE);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
         dgl::glCheckError();
 
         std::chrono::time_point<std::chrono::steady_clock> st = std::chrono::steady_clock::now();
         size_t frames = 0;
+
+        dgl::TextRender textRenderer;
 
         while (!should_close()) {
             ++frames;
@@ -240,12 +224,6 @@ void model_window::process() {
                 glm::mat4 lightView = glm::lookAt(dirLightPos,
                                                 dirLightPos + dirLightsDirections[0],
                                                 glm::vec3(0.0f, 1.0f, 0.0f));
-
-                if (pointLight) {
-                    lightProjection = projection;
-                    lightPos = dirLightPos;
-                    light_model = glm::scale(glm::translate(glm::mat4(1.f), lightPos), glm::vec3(0.2f));
-                }
 
                 glm::mat4 lightSpaceMatrix = lightProjection * lightView;
 
@@ -273,8 +251,10 @@ void model_window::process() {
                 norm_prog["view"] = camLookAt;
             }
 
-            // render pass
-            // shadow map pass
+            glClearColor(0.f, 0.f, 0.f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+            //// render pass
+            //// shadow map pass
             //glCullFace(GL_FRONT);
             {
                 glViewport(0, 0, shadowWidth, shadowHeight);
@@ -284,43 +264,24 @@ void model_window::process() {
             }
             //glCullFace(GL_BACK);
 
-            // render pass
+            //// render pass
             set_default_viewport();
             dgl::FrameBuffer::reset(GL_FRAMEBUFFER);
-            glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-            glActiveTexture(GL_TEXTURE0 + 15);
-            shadowMap.bind();
             render(true, model, light_model, model_prog, light_prog);
 
-            glViewport(0, 0, shadowWidth, shadowHeight);
-            render(true, model, light_model, depth_prog, depth_prog);
-
-            // outline pass
-            if (outline) {
-                glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
-                glStencilMask(0x00);
-                glDisable(GL_DEPTH_TEST);
-                {
-                    light_prog.use();
-                    light_prog["model"] = glm::scale(model, glm::vec3(1.01f));
-                    cyborg.draw(light_prog);
-
-                    for (auto const& m : boxModels) {
-                        light_prog["model"] = glm::scale(m, glm::vec3(1.01f));
-                        box.draw(light_prog);
-                    }
-                }
-                glStencilMask(0xFF);
-                glEnable(GL_DEPTH_TEST);
-            }
+            // fps
+            glDisable(GL_DEPTH_TEST);
+            std::chrono::duration<double> dur = std::chrono::steady_clock::now() - st;
+            double FPS = (1. * frames) / dur.count();
+            textRenderer.renderText(text_prog, "Avg. fps = " + std::to_string(FPS),
+                    "/Library/fonts/Arial Unicode.ttf", 25.0f, 250.0f, 1.0f, glm::vec3(1.f));
+            glEnable(GL_DEPTH_TEST);
+            // -- fps
 
             swap_buffers();
             dgl::glCheckError();
         }
 
-        std::chrono::duration<double> dur = std::chrono::steady_clock::now() - st;
-        dgl::errlog("FPS", (1. * frames) / dur.count());
 
         dgl::glCheckError();
     } catch (std::runtime_error const& re) {

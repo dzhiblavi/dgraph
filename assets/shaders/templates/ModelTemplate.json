@@ -1,0 +1,68 @@
+{
+    "name": "SimpleLight",
+
+    "out": "vec4 FragPos",
+
+    "VS_IN": {
+        "name": "fs_in",
+        "vars": [
+            "FragPos",
+            "Normal",
+            "TexCoords",
+            "FragPosLightSpace"
+        ]
+    },
+
+    "structs": [
+    ],
+
+    "uniforms": [
+        "vec3 viewPos"
+    ],
+
+    "functions": [
+        {
+            "name": "calcSpecular",
+            "decl": "float calcSpecular(vec3 lightDir, vec3 viewDir, vec3 normal);",
+            "def": "float calcSpecular(vec3 lightDir, vec3 viewDir, vec3 normal) { vec3 halfwayDir = normalize(lightDir + viewDir); return pow(max(dot(normal, halfwayDir), 0.0), 64.f); }"
+
+        },
+        {
+            "name": "calcDiffuse",
+            "decl": "float calcDiffuse(vec3 lightDir, vec3 normal);",
+            "def": "float calcDiffuse(vec3 lightDir, vec3 normal) { return max(0.0f, dot(lightDir, normal)); }"
+        },
+        {
+            "name": "calcAttenuation",
+            "decl": "float calcAttenuation(float distance, float constant, float linear, float quadratic);",
+            "def": "float calcAttenuation(float distance, float constant, float linear, float quadratic) { return 1.0 / (constant + linear * distance + quadratic * (distance * distance)); }"
+        }
+    ],
+
+    "main": {
+        "variables": {
+            [
+                {
+                    "name": "result",
+                    "type": "vec4",
+                    "init": "vec4(0.f)"
+                },
+                {
+                    "name": "norm",
+                    "type": "vec3",
+                    "init": "normalize(fs_in.Normal);"
+                },
+                {
+                    "name": "viewDir",
+                    "type": "vec3",
+                    "init": "normalize(viewPos - fs_in.FragPos);"
+                },
+                {
+                    "name": "Shadow",
+                    "type": "float",
+                    "init": "calculateShadow(fs_in.FragPosLightSpace, norm, normalize(-dirLights[0].direction));"
+                }
+            ]
+        }
+    }
+}

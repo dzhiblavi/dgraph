@@ -3,6 +3,7 @@
 
 #include <stdexcept>
 #include <filesystem>
+#include <vector>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -35,6 +36,8 @@ public:
     [[nodiscard]] native_handle_t native_handle() const noexcept;
 
     static Texture load_texture2d(std::filesystem::path const& path, bool sRGB = false);
+
+    static Texture load_textureCube2d(std::vector<std::filesystem::path> const& faces);
 
     static Texture genDepthTex2d(size_t width, size_t height);
 

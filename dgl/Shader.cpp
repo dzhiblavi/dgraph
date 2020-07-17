@@ -23,12 +23,16 @@ GLuint init(char const* source_code, GLuint shader_type) {
 
 namespace dgl {
 Shader::Shader(std::string const &file_path, GLuint shader_type) {
-    std::ifstream t(file_path);
-    t.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-    std::stringstream buffer;
-    buffer << t.rdbuf();
-    std::string sc = buffer.str();
-    id = init(sc.data(), shader_type);
+    try {
+        std::ifstream t(file_path);
+        t.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+        std::stringstream buffer;
+        buffer << t.rdbuf();
+        std::string sc = buffer.str();
+        id = init(sc.data(), shader_type);
+    } catch (std::exception const& e) {
+        DGL_EXC(std::string("Failed to read file: ") + file_path + " " + e.what());
+    }
 }
 
 Shader::Shader(char const *source_code, GLuint shader_type) {

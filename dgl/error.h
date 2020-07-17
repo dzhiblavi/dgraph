@@ -19,9 +19,9 @@ struct error : std::runtime_error {
 #define EQSTR(X) #X + "=" + std::string(X)
 
 #define DGL_ERROR_FULL(X, F, L, f) dgl::error(std::string(X) + ": " \
-                        + EQSTR(F) + "\n" \
+                        + F + "\n" \
                         + EQSTR(f) + "(...)\n" \
-                        + EQSTR(std::to_string(L)) + "\n")
+                        + "line=" + std::to_string(L) + "\n")
 
 
 #define DGL_ERROR(X) DGL_ERROR_FULL(X, __FILE__, __LINE__, __func__)

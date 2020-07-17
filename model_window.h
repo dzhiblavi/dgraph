@@ -15,6 +15,8 @@
 #include "dgl/error.h"
 #include "dgl/GpProgFrame.h"
 #include "dgl/FrameBuffer.h"
+#include "dgl/TextRender.h"
+#include "dgl/Skybox.h"
 
 #include "util/cb_signal.h"
 #include "util/timer.h"
@@ -22,9 +24,6 @@
 class model_window : dgl::Window {
 private:
     dgl::FpsCamera camera;
-    bool outline = false;
-    bool normals = false;
-    bool pointLight = false;
     float global_size = 1.f;
     float xpos = 26.f, ypos = 24.f, zpos = 20.5f;
     float chspeed = 0.3;

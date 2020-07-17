@@ -7,12 +7,14 @@ set(CMAKE_CXX_STANDARD 17)
 link_directories(/usr/local/lib)
 include_directories(/usr/local/include)
 
-find_package(GLEW   REQUIRED)
-find_package(OpenGL REQUIRED)
-find_package(GLUT   REQUIRED)
-find_package(GLM    REQUIRED)
+find_package(FreeType REQUIRED)
+find_package(GLEW     REQUIRED)
+find_package(OpenGL   REQUIRED)
+find_package(GLUT     REQUIRED)
+find_package(GLM      REQUIRED)
 
 include_directories(
+        ${FREETYPE_INCLUDE_DIRS}
         ${OPENGL_INCLUDE_DIRS}
         ${GLUT_INCLUDE_DIRS}
         ${GLEW_INCLUDE_DIRS}
@@ -38,8 +40,12 @@ set(DGL_SRC ${PROJECT_SOURCE_DIR}/dgl/Shader.h
             ${PROJECT_SOURCE_DIR}/dgl/buffers.cpp
             ${PROJECT_SOURCE_DIR}/dgl/Model.h
             ${PROJECT_SOURCE_DIR}/dgl/Model.cpp
+            ${PROJECT_SOURCE_DIR}/dgl/TextRender.cpp
+            ${PROJECT_SOURCE_DIR}/dgl/TextRender.h
             ${PROJECT_SOURCE_DIR}/dgl/FrameBuffer.h
             ${PROJECT_SOURCE_DIR}/dgl/FrameBuffer.cpp
+            ${PROJECT_SOURCE_DIR}/dgl/Skybox.h
+            ${PROJECT_SOURCE_DIR}/dgl/Skybox.cpp
             ${PROJECT_SOURCE_DIR}/dgl/GpProgFrame.h
             ${PROJECT_SOURCE_DIR}/dgl/FpsCamera.h
             ${PROJECT_SOURCE_DIR}/dgl/FpsCamera.cpp)
@@ -66,5 +72,6 @@ add_executable(dgraph
 target_link_libraries(dgraph ${OPENGL_LIBRARIES}
                              ${GLUT_LIBRARY}
                              ${GLEW_LIBRARIES}
+                             ${FREETYPE_LIBRARIES}
                              glfw glew assimp)
 
