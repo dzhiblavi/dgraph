@@ -75,26 +75,36 @@ void model_window::process() {
         std::filesystem::path path = std::filesystem::path(ctx->args().getStr("path"))
             .parent_path() / "../";
 
-        dgl::Shader light_vert(path / std::string("assets/shaders/vert.glsl"), GL_VERTEX_SHADER);
-        dgl::Shader light_frag(path / std::string("assets/shaders/light-frag.glsl"), GL_FRAGMENT_SHADER);
-        dgl::Shader model_vert(path / std::string("assets/shaders/model/shadow-vert.glsl"), GL_VERTEX_SHADER);
-        dgl::Shader model_frag(path / std::string("assets/shaders/model/shadow-frag.glsl"), GL_FRAGMENT_SHADER);
-        dgl::Shader norm_vert(path / std::string("assets/shaders/model/normal-vert.glsl"), GL_VERTEX_SHADER);
-        dgl::Shader norm_frag(path / std::string("assets/shaders/model/normal-frag.glsl"), GL_FRAGMENT_SHADER);
-        dgl::Shader norm_geo(path / std::string("assets/shaders/model/normal-geo.glsl"), GL_GEOMETRY_SHADER);
-        dgl::Shader depth_frag(path / std::string("assets/shaders/depth/2d-frag.glsl"), GL_FRAGMENT_SHADER);
-        dgl::Shader depth_vert(path / std::string("assets/shaders/depth/2d-vert.glsl"), GL_VERTEX_SHADER);
+        dgl::Shader light_vert(path / std::string("assets/shaders/simple/vert.glsl"), GL_VERTEX_SHADER);
+        dgl::Shader light_frag(path / std::string("assets/shaders/simple/white-frag.glsl"), GL_FRAGMENT_SHADER);
+        dgl::Shader model_vert(path / std::string("assets/shaders/lights/vert.glsl"), GL_VERTEX_SHADER);
+        dgl::Shader model_frag(path / std::string("assets/shaders/lights/frag.glsl"), GL_FRAGMENT_SHADER);
+        dgl::Shader dir_shadow_vert(path / std::string("assets/shaders/lights/shadow/directed/vert.glsl"),
+                GL_VERTEX_SHADER);
+        dgl::Shader dir_shadow_frag(path / std::string("assets/shaders/lights/shadow/directed/frag.glsl"),
+                GL_FRAGMENT_SHADER);
+        dgl::Shader point_shadow_frag(path / std::string("assets/shaders/lights/shadow/point/frag.glsl"),
+                GL_FRAGMENT_SHADER);
+        dgl::Shader point_shadow_vert(path / std::string("assets/shaders/lights/shadow/point/vert.glsl"),
+                GL_VERTEX_SHADER);
         dgl::Shader text_frag(path / std::string("assets/shaders/text/frag.glsl"), GL_FRAGMENT_SHADER);
         dgl::Shader text_vert(path / std::string("assets/shaders/text/vert.glsl"), GL_VERTEX_SHADER);
         dgl::Shader sb_frag(path / std::string("assets/shaders/skybox/frag.glsl"), GL_FRAGMENT_SHADER);
         dgl::Shader sb_vert(path / std::string("assets/shaders/skybox/vert.glsl"), GL_VERTEX_SHADER);
+        dgl::Shader depth_frag(path / std::string("assets/shaders/depth/2d/frag.glsl"), GL_FRAGMENT_SHADER);
+        dgl::Shader depth_vert(path / std::string("assets/shaders/depth/2d/vert.glsl"), GL_VERTEX_SHADER);
+        dgl::Shader depth_cube_frag(path / std::string("assets/shaders/depth/cube/frag.glsl"), GL_FRAGMENT_SHADER);
+        dgl::Shader depth_cube_vert(path / std::string("assets/shaders/depth/cube/vert.glsl"), GL_VERTEX_SHADER);
+        dgl::Shader depth_cube_geo(path / std::string("assets/shaders/depth/cube/geo.glsl"), GL_GEOMETRY_SHADER);
 
         dgl::GpProg light_prog(light_vert, light_frag);
         dgl::GpProg model_prog(model_vert, model_frag);
-        dgl::GpProg norm_prog(norm_vert, norm_frag, norm_geo);
-        dgl::GpProg depth_prog(depth_frag, depth_vert);
+        dgl::GpProg dir_shadow_prog(dir_shadow_vert, dir_shadow_frag);
+        dgl::GpProg point_shadow_prog(point_shadow_vert, point_shadow_frag);
         dgl::GpProg text_prog(text_frag, text_vert);
         dgl::GpProg sb_prog(sb_frag, sb_vert);
+        dgl::GpProg depth_prog(depth_frag, depth_vert);
+        dgl::GpProg depth_cube_prog(depth_cube_frag, depth_cube_vert, depth_cube_geo);
 
         dgl::Model lamp(path / "assets/objects/white-box/white-box.obj");
         dgl::Model cyborg(path / "assets/objects/cyborg/cyborg.obj");
@@ -108,7 +118,7 @@ void model_window::process() {
         dgl::glCheckError();
         glm::mat4 projection(1.f);
         projection = glm::perspective(45.0f, 800.f / 600.f, 0.1f, 100.0f);
-        int nd = 1, np = 1, ns = 0;
+        int nd = 0, np = 1, ns = 0;
 
         light_prog.use();
         light_prog["projection"] = projection;
@@ -116,17 +126,25 @@ void model_window::process() {
         sb_prog.use();
         sb_prog["projection"] = projection;
 
+        dir_shadow_prog.use();
+        dir_shadow_prog["projection"] = projection;
+        dir_shadow_prog["shadowMap"] = 15;
+
+        point_shadow_prog.use();
+        point_shadow_prog["projection"] = projection;
+        point_shadow_prog["shadowMap"] = 14;
+        point_shadow_prog["far_plane"] = 25.0f;
+
+        depth_cube_prog.use();
+        depth_cube_prog["farPlane"] = 25.0f;
+
         model_prog.use();
         model_prog["projection"] = projection;
         model_prog["nDirLights"] = nd;
         model_prog["nPointLights"] = np;
         model_prog["nSpotLights"] = ns;
-        model_prog["shadowMap"] = 15;
 
-        norm_prog.use();
-        norm_prog["projection"] = projection;
-
-        auto setup_light = [] (auto& light) {
+        auto setup_light = [] (auto light) {
             light["ambient"] = glm::vec3(0.05f, 0.05f, 0.05f);
             light["diffuse"] = glm::vec3(0.8f, 0.8f, 0.8f);
             light["specular"] = glm::vec3(1.f, 1.f, 1.f);
@@ -148,6 +166,18 @@ void model_window::process() {
             setup_light(light);
         }
 
+        dir_shadow_prog.use();
+        auto dlight = dir_shadow_prog["dirLight"];
+        setup_light(dlight);
+        dlight["direction"] = dirLightsDirections[0];
+
+        point_shadow_prog.use();
+        auto plight = point_shadow_prog["pointLight"];
+        plight["constant"] = 1.f;
+        plight["linear"] = 0.09f;
+        plight["quadratic"] = 0.032f;
+        setup_light(plight);
+
         const uint shadowWidth = 1600;
         const uint shadowHeight = 1600;
         dgl::FrameBuffer shadowFB;
@@ -163,10 +193,27 @@ void model_window::process() {
             glActiveTexture(GL_TEXTURE0);
         }
 
+        dgl::FrameBuffer cubeDepthFB;
+        dgl::Texture cubeMap = dgl::Texture::genDepthTexCube(shadowWidth, shadowHeight);
+        {
+            cubeDepthFB.bind(GL_FRAMEBUFFER);
+            glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, cubeMap.native_handle(), 0);
+            glDrawBuffer(GL_NONE);
+            glReadBuffer(GL_NONE);
+            dgl::FrameBuffer::reset(GL_FRAMEBUFFER);
+            glActiveTexture(GL_TEXTURE0 + 14);
+            glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMap.native_handle());
+            glActiveTexture(GL_TEXTURE0);
+        }
+
+        float near_plane = 0.1f;
+        float far_plane = 25.0f;
+        glm::mat4 shadowProj = glm::perspective(glm::radians(90.0f), 
+                (float)shadowWidth / (float)shadowHeight, near_plane, far_plane);
+
         auto render = [&] (bool drawl, glm::mat4 const& model
                 , glm::mat4 const& lmodel, dgl::GpProg& mp, dgl::GpProg& lp) {
             glEnable(GL_DEPTH_TEST);
-            glStencilMask(0x00);
             {
                 if (drawl) {
                     lp.use();
@@ -179,8 +226,6 @@ void model_window::process() {
                 ground.draw(mp);
             }
 
-            glStencilFunc(GL_ALWAYS, 1, 0xFF);
-            glStencilMask(0xFF);
             {
                 mp.use();
                 mp["model"] = model;
@@ -193,12 +238,12 @@ void model_window::process() {
             }
         };
 
-        glEnable(GL_MULTISAMPLE);
-        glEnable(GL_STENCIL_TEST);
+        //glEnable(GL_MULTISAMPLE);
+        //glEnable(GL_STENCIL_TEST);
         glEnable(GL_CULL_FACE);
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+        //glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
         dgl::glCheckError();
 
         std::chrono::time_point<std::chrono::steady_clock> st = std::chrono::steady_clock::now();
@@ -218,6 +263,25 @@ void model_window::process() {
             glm::mat4 camLookAt = camera.apply_move().lookAt();
 
             {
+                std::vector<glm::mat4> shadowTransforms;
+                shadowTransforms.push_back(shadowProj * glm::lookAt(lightPos, lightPos 
+                            + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
+                shadowTransforms.push_back(shadowProj * glm::lookAt(lightPos, lightPos 
+                            + glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
+                shadowTransforms.push_back(shadowProj * glm::lookAt(lightPos, lightPos
+                            + glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)));
+                shadowTransforms.push_back(shadowProj * glm::lookAt(lightPos, lightPos 
+                            + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f)));
+                shadowTransforms.push_back(shadowProj * glm::lookAt(lightPos, lightPos 
+                            + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
+                shadowTransforms.push_back(shadowProj * glm::lookAt(lightPos, lightPos 
+                            + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
+
+                depth_cube_prog.use();
+                for (int i = 0; i < 6; ++i) {
+                    depth_cube_prog["viewMatrices"][i] = shadowTransforms[i];
+                }
+
                 float near_plane = 5.0f, far_plane = 200.f;
                 glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
                 glm::vec3 dirLightPos = glm::vec3(xpos, ypos, zpos);
@@ -227,14 +291,18 @@ void model_window::process() {
 
                 glm::mat4 lightSpaceMatrix = lightProjection * lightView;
 
+                dir_shadow_prog.use();
+                dir_shadow_prog["lightSpaceMatrix"] = lightSpaceMatrix;
+
                 depth_prog.use();
                 depth_prog["lightSpaceMatrix"] = lightSpaceMatrix;
-
-                model_prog.use();
-                model_prog["lightSpaceMatrix"] = lightSpaceMatrix;
             }
 
             {
+                dir_shadow_prog.use();
+                dir_shadow_prog["viewPos"] = cp;
+                dir_shadow_prog["view"] = camLookAt;
+
                 model_prog.use();
                 model_prog["viewPos"] = cp;
                 model_prog["pointLights"][0]["position"] = lightPos;
@@ -242,32 +310,45 @@ void model_window::process() {
                 model_prog["spotLights"][0]["direction"] = camera.direction();
                 model_prog["view"] = camLookAt;
 
+                point_shadow_prog.use();
+                point_shadow_prog["viewPos"] = cp;
+                point_shadow_prog["pointLight"]["position"] = lightPos;
+                point_shadow_prog["view"] = camLookAt;
+
+                depth_cube_prog.use();
+                depth_cube_prog["lightPos"] = lightPos;
+
                 light_prog.use();
                 light_prog["view"] = camLookAt;
                 light_prog["model"] = light_model;
-
-                norm_prog.use();
-                norm_prog["model"] = model;
-                norm_prog["view"] = camLookAt;
             }
 
             glClearColor(0.f, 0.f, 0.f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-            //// render pass
-            //// shadow map pass
+
+            // directional light shadow pass
             //glCullFace(GL_FRONT);
-            {
-                glViewport(0, 0, shadowWidth, shadowHeight);
-                shadowFB.bind(GL_FRAMEBUFFER);
-                glClear(GL_DEPTH_BUFFER_BIT);
-                render(false, model, light_model, depth_prog, depth_prog);
-            }
+            //{
+                //glViewport(0, 0, shadowWidth, shadowHeight);
+                //shadowFB.bind(GL_FRAMEBUFFER);
+                //glClear(GL_DEPTH_BUFFER_BIT);
+                //render(false, model, light_model, depth_prog, depth_prog);
+            //}
             //glCullFace(GL_BACK);
 
-            //// render pass
+            // point light shadow pass
+            {
+                glViewport(0, 0, shadowWidth, shadowHeight);
+                cubeDepthFB.bind(GL_FRAMEBUFFER);
+                glClear(GL_DEPTH_BUFFER_BIT);
+                render(false, model, light_model, depth_cube_prog, depth_cube_prog);
+            }
+
+            // render pass
             set_default_viewport();
             dgl::FrameBuffer::reset(GL_FRAMEBUFFER);
-            render(true, model, light_model, model_prog, light_prog);
+            //render(true, model, light_model, model_prog, light_prog);
+            render(true, model, light_model, point_shadow_prog, light_prog);
 
             // fps
             glDisable(GL_DEPTH_TEST);

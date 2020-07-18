@@ -125,7 +125,7 @@ Texture Texture::genDepthTexCube(size_t width, size_t height) {
     return Texture(depthMap);
 }
 
-Texture::Texture(native_handle_t handle) 
+Texture::Texture(native_handle_t handle)
     : id(handle) {}
 
 Texture::~Texture() {
